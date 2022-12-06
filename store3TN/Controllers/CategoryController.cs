@@ -16,7 +16,7 @@ namespace store3TN.Controllers
         public IActionResult Index(int page = 1)
         {
             // get all products
-            List<SanPham> list = DBContext.getAllSanPham();
+            List<SanPham> list = GetSanPham.getAllSanPham();
             const int pageSize = 9;
             if (page < 1) page = 1;
             int recsCount = list.Count();
@@ -24,12 +24,12 @@ namespace store3TN.Controllers
             int recSkip = (page - 1) * pageSize;
             var data = list.Skip(recSkip).Take(pageSize).ToList();
             this.ViewBag.Pager = pager;
-            this.ViewBag.HotProducts = DBContext.getAllSanPhamHot();
-            this.ViewBag.SLSP = DBContext.getSoLuongSanPham();
-            this.ViewBag.RAM = DBContext.getRAM();
-            this.ViewBag.DungLuong = DBContext.getDungLuong();
+            this.ViewBag.HotProducts = GetSanPham.getAllSanPhamHot();
+            this.ViewBag.SLSP = GetSanPham.getSoLuongSanPham();
+            this.ViewBag.RAM = GetSanPham.getRAM();
+            this.ViewBag.DungLuong = GetSanPham.getDungLuong();
             // get all hot products
-            List<SanPham> listHot = DBContext.getAllSanPhamHot();
+            List<SanPham> listHot = GetSanPham.getAllSanPhamHot();
             return View(data);
         }
     }
