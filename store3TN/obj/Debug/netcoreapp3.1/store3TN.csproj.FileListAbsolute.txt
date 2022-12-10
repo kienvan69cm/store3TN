@@ -70,3 +70,4 @@ C:\Users\kienv\Desktop\store3TN\store3TN\store3TN\obj\Debug\netcoreapp3.1\Razor\
 C:\Users\kienv\Desktop\store3TN\store3TN\store3TN\bin\Debug\netcoreapp3.1\PagedList.dll
 C:\Users\kienv\Desktop\store3TN\store3TN\store3TN\bin\Debug\netcoreapp3.1\PagedList.Mvc.dll
 C:\Users\kienv\Desktop\store3TN\store3TN\store3TN\obj\Debug\netcoreapp3.1\Razor\Views\Product\Index.cshtml.g.cs
+C:\Users\kienv\Desktop\store3TN\store3TN\store3TN\obj\Debug\netcoreapp3.1\Razor\Views\Cart\Index.cshtml.g.cs

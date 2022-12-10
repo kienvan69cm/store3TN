@@ -1,0 +1,199 @@
+﻿@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	Dictionary<int, SanPham> ListSP = (Dictionary<int, SanPham>)ViewBag.ListSanPham;
+}
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+	<div class="container">
+		<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+			<div class="col-first">
+				<h1>Giỏ hàng</h1>
+				<nav class="d-flex align-items-center">
+					<a href="index.php">Trang chủ<span class="lnr lnr-arrow-right"></span></a>
+					<a href="#">Giỏ hàng</a>
+				</nav>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- End Banner Area -->
+
+<!--================Cart Area =================-->
+<section class="cart_area">
+	<div class="container">
+		<div class="cart_inner">
+			<div class="table-responsive">
+				<table class="table">
+					<thead>
+						<tr>
+							<th scope="col">Sản phẩm</th>
+							<th scope="col"></th>
+							<th scope="col">Giá</th>
+							<th scope="col">Số lượng</th>
+							<th scope="col">Tổng tiền</th>
+						</tr>
+					</thead>
+					<tbody>
+						@{
+							decimal TongGTGioHang = 0;
+						}
+						@for (int i = 0; i < Model.ListSanPham.Count; i++)
+						{
+							<tr data-id=@i>
+								<td>
+									<div class='media'>
+										<div class='d-flex'>
+											<img src=@ListSP[Model.ListSanPham[i]].HinhAnh class='img-product'>
+										</div>
+										<div class='media-body'>
+											<p>@ListSP[Model.ListSanPham[i]].TenSP</p>
+										</div>
+									</div>
+								</td>
+								<td>
+									<button class='btn-delete ml-3 genric-btn default-border small' data-id=@i>Xóa</button>
+								</td>
+								<td>
+									@{
+										decimal GiaBan = ListSP[Model.ListSanPham[i]].GiaBan;
+									}
+									<h5 class='product-price' data-id=@i>@GiaBan.ToString("N0") VNĐ</h5>
+								</td>
+								<td>
+									<div class='product_count'>
+										<input type='text' name='qty' data-id=@i value=@Model.ListSoLuong[i]
+										title='Số lượng mua:' class='input-text qty'>
+										<button class='increase items-count' data-id=@i type='button'><i
+											class='lnr lnr-chevron-up'></i></button>
+										<button class='reduced items-count' data-id=@i type='button'><i
+											class='lnr lnr-chevron-down'></i></button>
+									</div>
+								</td>
+								<td>
+									<h5 class='product-cost' data-id="@i" style="min-width: 200px;">
+										@{
+											decimal TongTien = GiaBan * Model.ListSoLuong[i];
+											TongGTGioHang += TongTien;
+										}
+										<span>@TongTien.ToString("N0") VNĐ</span>
+									</h5>
+								</td>
+							</tr>
+						}
+						<tr class="bottom_button">
+							<td>
+								<a class="primary-btn" name="xoahet">Xóa hết</a>
+							</td>
+							<td>
+							</td>
+							<td>
+							</td>
+							<td>
+							</td>
+							<td>
+								<div class="cupon_text d-flex align-items-center justify-content-end">
+									<input type="text" placeholder="Mã giảm giá">
+									<a class="primary-btn">Dùng</a>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+							</td>
+							<td>
+							</td>
+							<td>
+							</td>
+							<td>
+								<h5>Tổng tiền</h5>
+							</td>
+							<td>
+								<h5 id="total-cost">@TongGTGioHang.ToString("N0") VNĐ</h5>
+							</td>
+						</tr>
+						<tr class="out_button_area">
+							<td>
+							</td>
+							<td>
+							</td>
+							<td>
+							</td>
+							<td>
+							</td>
+							<td>
+								<div class="checkout_btn_inner d-flex align-items-center">
+									<a class="gray_btn" href="#">Tiếp tục shopping</a>
+									<a class="primary-btn" href="checkout.php">Đi đến thanh toán</a>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</section>
+<!--================End Cart Area =================-->
+
+<!-- Start related-product Area -->
+<section class="related-product-area section_gap_bottom">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-lg-6 text-center">
+				<div class="section-title">
+					<h1>Voucher hiện có</h1>
+					<p>Có lẽ bạn sẽ cần đó nha. Nhanh tay nào, số lượng có hạn!</p>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-6">
+				<h4 class="text-center">Voucher free ship</h4>
+				<div class="mt-4 row">
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<h4 class="text-center">Voucher giảm giá</h4>
+				<div class="mt-4 row">
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<script>
+	var Alltr = document.querySelectorAll('tr[data-id]')
+	Alltr.forEach(function (item, index) {
+		var Allbutton = item.querySelectorAll('button[data-id]');
+		var delelte = Allbutton[0];
+		var increase = Allbutton[1];
+		var reduced = Allbutton[2];
+		var gia = parseInt(item.getElementsByClassName("product-price")[0].innerHTML.replaceAll(',', '').replace(' VNĐ', ''));
+		var soluong = item.querySelector('input[data-id]');
+		var tongtien = item.getElementsByClassName("product-cost")[0]
+		var tongdonhang = document.getElementById("total-cost");
+		increase.addEventListener("click", function () {
+			soluong.value = parseInt(soluong.value) + 1;
+			var tt = gia * parseInt(soluong.value);
+			tongtien.innerHTML = tt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " VNĐ";
+			tongdonhang.innerHTML = (parseInt(tongdonhang.innerHTML.replaceAll(',', '').replace(' VNĐ', '')) + gia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " VNĐ";
+		});
+		reduced.addEventListener("click", function () {
+			if (parseInt(soluong.value) > 1) {
+				soluong.value = parseInt(soluong.value) - 1;
+			}
+			var tt = gia * parseInt(soluong.value);
+			tongtien.innerHTML = tt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " VNĐ";
+			tongdonhang.innerHTML = (parseInt(tongdonhang.innerHTML.replaceAll(',', '').replace(' VNĐ', '')) - gia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " VNĐ";
+		});
+		delelte.addEventListener("click", function () {
+			delelte.parentElement.parentElement.remove();
+		});
+	})
+	var deleteAll = document.getElementsByName("xoahet")[0];
+	deleteAll.addEventListener("click", function () {
+		var Alltr = document.querySelectorAll('tr[data-id]')
+		Alltr.forEach(function (item, index) {
+			item.remove();
+		})
+	})
+</script>

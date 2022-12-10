@@ -11,8 +11,7 @@ namespace store3TN.Controllers
     [Route("product")]
     public class ProductController : Controller
     {
-        [Route("index")]
-        [Route("")]
+        [Route("{MaSP}")]
         public IActionResult Index(int MaSP)
         {
             this.ViewBag.BLSP = GetBinhLuan.getAllBLSP();
