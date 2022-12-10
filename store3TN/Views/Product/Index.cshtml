@@ -1,5 +1,16 @@
 ﻿@{
 	Layout = "~/Views/Shared/_Layout.cshtml";
+	string htmlStr = Model.ChiTiet;
+	// replace \" with " to avoid escaping in the string literal
+	htmlStr = htmlStr.Replace("\\\"", "\"");
+	// fix \r\n
+	htmlStr = htmlStr.Replace("\\r\\n", "\r\n");
+	List<BinhLuan> BLSP = ViewBag.BLSP;
+	List<BinhLuan> AllTLBL = ViewBag.AllTLBL;
+	Dictionary<int, List<BinhLuan>> TLBL = ViewBag.TLBL;
+	Dictionary<int, string> TenND = ViewBag.TenND;
+	List<DanhGia> DanhGia = ViewBag.DanhGia;
+	Dictionary<int, Dictionary<int, int>> SLDanhGia = ViewBag.SLDanhGia;
 }
 <!-- Start Banner Area -->
 <section class="banner-area organic-breadcrumb">
@@ -44,18 +55,15 @@
 						<li><a href="#"><span>Tình trạng</span> : Còn hàng</a></li>
 					</ul>
 					<p>@Model.MoTa</p>
-					<div class="d-flex align-items-center product_ram">
-						<button class="genric-btn primary-border mr-4">256GB</button>
-						<button class="genric-btn default-border mr-4">128GB</button>
-						<button class="genric-btn default-border">64GB</button>
-					</div>
-					<div class="mt-4 d-flex flex-wrap align-items-center product_color">
-						<button class="genric-btn primary-border mr-4">Đen</button>
-						<button class="genric-btn default-border mr-4">Vàng</button>
-						<button class="genric-btn default-border mr-4">Hồng</button>
-						<button class="genric-btn default-border mr-4">Xanh</button>
-						<button class="genric-btn default-border mt-4">Tím</button>
-					</div>
+					<ul>
+						<li><span class='lnr lnr-sync p-1'></span> Đổi trả trong vòng <strong>12 tháng</strong> tại 30
+							siêu
+							thị toàn quốc (miễn phí tháng đầu)</li>
+						<li><span class='lnr lnr-checkmark-circle p-1'></span> Bảo hành chính hãng <strong>1
+								năm</strong> tại các trung tâm bảo hành hãng</li>
+						<li><span class='lnr lnr-inbox p-1'></span> Bộ sản phẩm gồm: <strong>Hộp, Sách hướng dẫn, Cáp
+								Lightning - Type C, ...</strong></li>
+					</ul>
 					<div class="mt-5 product_count">
 						<label for="qty">Quantity:</label>
 						<input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:"
@@ -96,69 +104,56 @@
 			</li>
 		</ul>
 		<div class="tab-content" id="myTabContent">
-			<div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
+			<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
 				<p>@Model.MoTa</p>
 			</div>
 			<div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
 				<div class="table-responsive">
-					@Model.ChiTiet
+					@Html.Raw(htmlStr)
 				</div>
 			</div>
 			<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
 				<div class="row">
 					<div class="col-lg-6">
 						<div class="comment_list">
-							<div class="review_item">
-								<div class="media">
-									<div class="d-flex">
-										<img src="img/product/review-1.png" alt="">
+							@foreach (var item in BLSP)
+							{
+								if (item.MaSP == Model.MaSP)
+								{
+									<div class="review_item">
+										<div class="media">
+											<div class="d-flex">
+												<img src="img/product/review-1.png" alt="">
+											</div>
+											<div class="media-body">
+												<h4>@TenND[item.MaND]</h4>
+												<h5>@item.NgayLap</h5>
+												<a class="reply_btn" href="#">Trả lời</a>
+											</div>
+										</div>
+										<p>@item.BLuan</p>
 									</div>
-									<div class="media-body">
-										<h4>Blake Ruiz</h4>
-										<h5>12th Feb, 2018 at 05:56 pm</h5>
-										<a class="reply_btn" href="#">Trả lời</a>
-									</div>
-								</div>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-									incididunt ut labore et
-									dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-									laboris nisi ut aliquip ex ea
-									commodo</p>
-							</div>
-							<div class="review_item reply">
-								<div class="media">
-									<div class="d-flex">
-										<img src="img/product/review-2.png" alt="">
-									</div>
-									<div class="media-body">
-										<h4>Blake Ruiz</h4>
-										<h5>12th Feb, 2018 at 05:56 pm</h5>
-										<a class="reply_btn" href="#">Trả lời</a>
-									</div>
-								</div>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-									incididunt ut labore et
-									dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-									laboris nisi ut aliquip ex ea
-									commodo</p>
-							</div>
-							<div class="review_item">
-								<div class="media">
-									<div class="d-flex">
-										<img src="img/product/review-3.png" alt="">
-									</div>
-									<div class="media-body">
-										<h4>Blake Ruiz</h4>
-										<h5>12th Feb, 2018 at 05:56 pm</h5>
-										<a class="reply_btn" href="#">Trả lời</a>
-									</div>
-								</div>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-									incididunt ut labore et
-									dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-									laboris nisi ut aliquip ex ea
-									commodo</p>
-							</div>
+									if (TLBL.ContainsKey(item.MaBL))
+									{
+										foreach (var item1 in TLBL[item.MaBL])
+										{
+											<div class="review_item reply">
+												<div class="media">
+													<div class="d-flex">
+														<img src="img/product/review-2.png" alt="">
+													</div>
+													<div class="media-body">
+														<h4>@TenND[item1.MaND]</h4>
+														<h5>@item1.NgayLap</h5>
+														<a class="reply_btn" href="#">Trả lời</a>
+													</div>
+												</div>
+												<p>@item1.BLuan</p>
+											</div>
+										}
+									}
+								}
+							}
 						</div>
 					</div>
 					<div class="col-lg-6">
@@ -198,101 +193,91 @@
 					</div>
 				</div>
 			</div>
-			<div class="tab-pane fade show active" id="review" role="tabpanel" aria-labelledby="review-tab">
+			<div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
 				<div class="row">
 					<div class="col-lg-6">
 						<div class="row total_rate">
 							<div class="col-6">
+								@{
+									int sldg = 0;
+									int five = 0;
+									int four = 0;
+									int three = 0;
+									int two = 0;
+									int one = 0;
+									// calc sum of value of SLDanhGia[Model.MaSP]
+									if (SLDanhGia.ContainsKey(Model.MaSP))
+									{
+										foreach (var item in SLDanhGia[Model.MaSP])
+										{
+											sldg += item.Value;
+										}
+										five = SLDanhGia[Model.MaSP][5];
+										four = SLDanhGia[Model.MaSP][4];
+										three = SLDanhGia[Model.MaSP][3];
+										two = SLDanhGia[Model.MaSP][2];
+										one = SLDanhGia[Model.MaSP][1];
+									}
+
+								}
 								<div class="box_total">
 									<h5>Tổng quan</h5>
-									<h4>4.0</h4>
-									<h6>(03 đánh giá)</h6>
+									<h4>@Model.SoSao</h4>
+									<h6>(@sldg đánh giá)</h6>
 								</div>
 							</div>
 							<div class="col-6">
 								<div class="rating_list">
-									<h3>Dựa trên 3 đánh giá</h3>
+									<h3>Dựa trên @sldg đánh giá</h3>
 									<ul class="list">
 										<li><a href="#">5 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i
 													class="fa fa-star"></i><i class="fa fa-star"></i><i
-													class="fa fa-star"></i> 01</a></li>
+													class="fa fa-star"></i> @five </a></li>
 										<li><a href="#">4 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i
 													class="fa fa-star"></i><i class="fa fa-star"></i><i
-													class="fa fa-star"></i> 01</a></li>
+													class="fa fa-star-o"></i> @four</a></li>
 										<li><a href="#">3 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i
-													class="fa fa-star"></i><i class="fa fa-star"></i><i
-													class="fa fa-star"></i> 01</a></li>
+													class="fa fa-star"></i><i class="fa fa-star-o"></i><i
+													class="fa fa-star-o"></i> @three</a></li>
 										<li><a href="#">2 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i
-													class="fa fa-star"></i><i class="fa fa-star"></i><i
-													class="fa fa-star"></i> 01</a></li>
-										<li><a href="#">1 Star <i class="fa fa-star"></i><i class="fa fa-star"></i><i
-													class="fa fa-star"></i><i class="fa fa-star"></i><i
-													class="fa fa-star"></i> 01</a></li>
+													class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i
+													class="fa fa-star-o"></i> @two</a></li>
+										<li><a href="#">1 Star <i class="fa fa-star"></i><i class="fa fa-star-o"></i><i
+													class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i
+													class="fa fa-star-o"></i> @one</a></li>
 									</ul>
 								</div>
 							</div>
 						</div>
 						<div class="review_list">
-							<div class="review_item">
-								<div class="media">
-									<div class="d-flex">
-										<img src="img/product/review-1.png" alt="">
+							@foreach (var item in DanhGia)
+							{
+								@if (item.MaSP == Model.MaSP)
+								{
+									<div class="review_item">
+										<div class="media">
+											<div class="d-flex">
+												<img src="img/product/review-3.png" alt="">
+											</div>
+											<div class="media-body">
+												<h4>@TenND[item.MaND]</h4>
+												<div>
+													@for (int i = 0; i < item.SoSao; i++)
+													{
+														<i class="fa fa-star star-rv"></i>
+													}
+													@for (int i = 0; i < 5 - item.SoSao; i++)
+													{
+														<i class="fa fa-star-o star-rv"></i>
+													}
+												</div>
+												<h5>@item.NgayDanhGia</h5>
+											</div>
+										</div>
+										<p>@item.NoiDung</p>
 									</div>
-									<div class="media-body">
-										<h4>Blake Ruiz</h4>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-									</div>
-								</div>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-									incididunt ut labore et
-									dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-									laboris nisi ut aliquip ex ea
-									commodo</p>
-							</div>
-							<div class="review_item">
-								<div class="media">
-									<div class="d-flex">
-										<img src="img/product/review-2.png" alt="">
-									</div>
-									<div class="media-body">
-										<h4>Blake Ruiz</h4>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-									</div>
-								</div>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-									incididunt ut labore et
-									dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-									laboris nisi ut aliquip ex ea
-									commodo</p>
-							</div>
-							<div class="review_item">
-								<div class="media">
-									<div class="d-flex">
-										<img src="img/product/review-3.png" alt="">
-									</div>
-									<div class="media-body">
-										<h4>Blake Ruiz</h4>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-									</div>
-								</div>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-									incididunt ut labore et
-									dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-									laboris nisi ut aliquip ex ea
-									commodo</p>
-							</div>
+								}
+							}
 						</div>
 					</div>
 					<div class="col-lg-6">

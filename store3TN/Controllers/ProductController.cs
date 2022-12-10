@@ -15,6 +15,11 @@ namespace store3TN.Controllers
         [Route("")]
         public IActionResult Index(int MaSP)
         {
+            this.ViewBag.BLSP = GetBinhLuan.getAllBLSP();
+            this.ViewBag.TLBL = GetBinhLuan.TLBL();
+            this.ViewBag.TenND = GetNguoiDung.TenND();
+            this.ViewBag.DanhGia = GetDanhGia.getAllDanhGia();
+            this.ViewBag.SLDanhGia = GetDanhGia.SLDanhGia();
             return View(GetSanPham.getThongTinSanPham(MaSP));
         }
     }
